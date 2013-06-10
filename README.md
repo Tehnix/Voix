@@ -1,7 +1,8 @@
 VoIP
 ===================
 ### Stuffz ###
-* Connecter til server
+* Connect til server (aka, ikke P2P)
+* Privat samtale (one-on-one)
 * Lobby - alle snakker sammen her
 * Chat rum / gruppe chat
 
