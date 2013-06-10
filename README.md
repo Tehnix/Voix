@@ -1,12 +1,12 @@
 VoIP
 ===================
-## Stuffz ##
-# Connecter til server
+### Stuffz ###
+* Connecter til server
 * Lobby - alle snakker sammen her
 * Chat rum / gruppe chat
 
-## Extra stuffz ##
+### Extra stuffz ###
 * Sideløbende IM
 
-## Implementation ##
+### Implementation ###
 * Kig på PyAudio (+ wrapper til speex)
