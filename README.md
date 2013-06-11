@@ -7,7 +7,8 @@ VoIP
 * Chat rum / gruppe chat
 
 ### Extra stuffz ###
-* Sideløbende IM
+* Sideløbende IM (En del af TCP kanalen)
 
 ### Implementation ###
 * Kig på PyAudio (+ wrapper til speex)
+* UDP -> Voice channel, TCP -> Signalling channel
