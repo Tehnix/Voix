@@ -14,9 +14,11 @@ VoIP
 * UDP -> Voice channel, TCP -> Signalling channel
 
 ### Protocol ###
-For quickness, I will use `>>>` to indicate client input, and server response is with nothing prepended (kindda like output in a REPL).
+For quickness, I will use `>>>` to indicate client input, and server
+response is with nothing prepended (kindda like output in a REPL).
 
-A client shall *always* connect with a nickname, no spaces or `"` allowed though. A nickname must be unique!
+A client shall *always* connect with a nickname, no spaces or `"`
+allowed though. A nickname must be unique!
 
 A channel is denoted with # prepended to it.
 
@@ -29,7 +31,8 @@ Example of a run:
   </tr>
   <tr>
     <td>`>>>` CONNECT: "Nickname" "Real Name" 1.0.0</td>
-    <td>Connect to the server with a nickname, real name and the version number</td>
+    <td>Connect to the server with a nickname, real name and the
+    version number</td>
   </tr>
   <tr>
     <td>ACCEPT: hostname.com</td>
@@ -37,27 +40,30 @@ Example of a run:
   </tr>
   <tr>
     <td>PING: 14139282</td>
-    <td>The server pings the connection with a random number to check if it is available</td>
+    <td>The server pings the connection with a random number to check
+    if it is available</td>
   </tr>
   <tr>
     <td>`>>>` PONG: 14139282</td>
-    <td>The client responds with PONG and the random number used in the PING</td>
+    <td>The client responds with PONG and the random number used in
+    the PING</td>
   </tr>
   <tr>
     <td>JOINED: #Lobby</td>
     <td>Inform of the default room that the client is thrown into</td>
   </tr>
   <tr>
-    <td>USERLIST #Lobby: John, Michael, Willy</td>
+  <td>USERLIST #Lobby: John, Michael, Willy</td>
     <td>Return of list of users in the specified room</td>
   </tr>
   <tr>
-    <td>`>>>` PRIVMSG #Lobby: Hey all!</td>
-    <td>Send a message to the room #Lobby</td>
+    <td>`>>>` MSG: Hey all!</td>
+    <td>Send a message to the active room. This is altered on the
+    server and the client's username is added. See the next example.</td>
   </tr>
   <tr>
-    <td>PRIVMSG #Lobby: Hey Nickname!</td>
-    <td>Receive a message from the room #Lobby</td>
+    <td>MSG John: Hey Nickname!</td>
+    <td>Receive a message from the active room</td>
   </tr>
   <tr>
     <td>`>>>` PRIVMSG John: Hey John!</td>
@@ -73,7 +79,8 @@ Example of a run:
   </tr>
   <tr>
     <td>TALK John: Accept</td>
-    <td>John accepts the VoIP call, which is started in a new thread and kept separate from the main thread</td>
+    <td>John accepts the VoIP call, which is started in a new thread
+    and kept separate from the main thread</td>
   </tr>
   <tr>
     <td>`>>>` Talk John: End</td>
@@ -124,5 +131,3 @@ Example of a run:
     <td>Disconnect from the server</td>
   </tr>
 </table>
-
-
