@@ -53,16 +53,16 @@ Example of a run:
     <td>Inform of the default room that the client is thrown into</td>
   </tr>
   <tr>
-  <td>USERLIST #Lobby: John, Michael, Willy</td>
+    <td>USERLIST #Lobby: John, Michael, Willy</td>
     <td>Return of list of users in the specified room</td>
   </tr>
   <tr>
-    <td>`>>>` MSG: Hey all!</td>
-    <td>Send a message to the active room. This is altered on the
+    <td>`>>>` MSG #Lobby: Hey all!</td>
+    <td>Sends a public message within #Lobby. This is altered on the
     server and the client's username is added. See the next example.</td>
   </tr>
   <tr>
-    <td>MSG John: Hey Nickname!</td>
+    <td>MSG John #Lobby: Hey Nickname!</td>
     <td>Receive a message from the active room</td>
   </tr>
   <tr>
