@@ -35,7 +35,7 @@ class ConnectionOutTest(unittest.TestCase):
         self.client.tcp.connected = True
 
     def test_client_connect_to_server(self):
-        self.assertEquals(self.data, 'CONNECT: joe Cake Man {0}\r\n'.format(get_git_version()))
+        self.assertEquals(self.data, 'CONNECT: "joe" "Cake Man" {0}\r\n'.format(get_git_version()))
 
     def test_client_raises_exception_if_host_not_set(self):
         self.client.host = None
@@ -64,7 +64,7 @@ class ConnectionOutTest(unittest.TestCase):
 
     def test_request_response_accept(self):
         self.cli.prompt_by_requester = 'John'
-        voix.interface.cli.raw_input = lambda _: 'y'
+        voix.interface.cli.raw_input = lambda: 'y'
         self.cli.main_loop()
         self.data = self.con.recv(1024)
         self.assertEquals(self.data, 'TALK John: Accept\r\n')
