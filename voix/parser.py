@@ -19,7 +19,6 @@ class Parser(object):
                         'JOINED': client.joined_channel,
                         'USERLIST': client.userlist}
 
-
     def parse(self, data):
         """
 
@@ -27,7 +26,10 @@ class Parser(object):
         - `self`:
         - `data`:
         """
-        match = re.match(r'^([A-Z]+)[ ]?([a-zA-Z]+)?[ ]?([0-9a-zA-Z#]+)?: (.+)$',data,re.DOTALL)
+        match = re.match(
+            r'^([A-Z]+)[ ]?([a-zA-Z]+)?[ ]?([0-9a-zA-Z#]+)?: (.+)$',
+            data,
+            re.DOTALL)
         if not match is None:
             groups = match.groups()
             func = self.actions.get(groups[0])

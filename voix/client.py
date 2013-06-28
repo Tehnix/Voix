@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-The main client.
+The main client object.
 
 """
 import logging
@@ -43,7 +43,6 @@ class Client(object):
         """
         self.update_callback = func
 
-
     def set_host(self, data):
         """
         Sets the value of a given field.
@@ -80,7 +79,9 @@ class Client(object):
 
         """
         if self.host is None:
-            raise Warning('You must set the server\'s hostname and your name before connecting')
+            raise Warning(' '.join(['You must set the server\'s',
+                                    'hostname and your name before',
+                                    'connecting']))
 
         self.nick = data[2].split()[0]
         name = ' '.join(data[2].split()[1:])
@@ -88,9 +89,11 @@ class Client(object):
             self.tcp.connect((self.host, int(self.port)))
         except socket.error as e:
             return self.denied([e.strerror])
-        self.tcp.send(bytes('CONNECT: "{0}" "{1}" {2}\r\n'.format(self.nick,
-                                                              name,
-                                                              get_git_version())))
+        self.tcp.send(
+            bytes('CONNECT: "{0}" "{1}" {2}\r\n'.format(self.nick,
+                                                        name,
+                                                        get_git_version()))
+        )
         self.tcp.handle.start()
 
     def pong(self, data):
@@ -154,7 +157,10 @@ class Client(object):
         if (not data[0] and data[1]) or (not data[1] and data[0]):
             self.tcp.send(bytes('MSG {0}: {1}\r\n'.format(chan or recp, msg)))
 
-        self.message_handler.message(author=sender, recipient=recp, channel=chan, message=msg)
+        self.message_handler.message(author=sender,
+                                     recipient=recp,
+                                     channel=chan,
+                                     message=msg)
 
     def talk(self, data):
         """
@@ -182,23 +188,30 @@ class Client(object):
         if data[1] is None:
             self.message_handler.talk(responder=data[0], code=code)
         else:
-            self.message_handler.talk(requester=data[0], responder=data[1], code=code)
+            self.message_handler.talk(requester=data[0],
+                                      responder=data[1],
+                                      code=code)
             recp = ' %s' % data[1]
 
-        self.tcp.send(bytes('TALK {0}{1}: {2}\r\n'.format(data[0], recp, data[2])))
+        self.tcp.send(bytes('TALK {0}{1}: {2}\r\n'.format(data[0],
+                                                          recp,
+                                                          data[2])))
 
         if code == 'Accept':
             self.udp.open_stream()
         elif code == 'End':
             self.udp.close_stream()
 
-
     def accepted(self, data):
         self.tcp.connected = True
-        logging.debug('Connection to {0} has been established!'.format(data[0]))
+        logging.debug(
+            'Connection to {0} has been established!'.format(data[0])
+        )
 
     def denied(self, data):
-        logging.debug('Your attempt to connect failed. Reason: {0}'.format(data[0]))
+        logging.debug(
+            'Your attempt to connect failed. Reason: {0}'.format(data[0])
+        )
 
     def joined_channel(self, data):
         self.update_callback(channel=data[2])
