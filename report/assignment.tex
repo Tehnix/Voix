@@ -66,12 +66,11 @@ each hold their own class. Each class is called the same as its file
 class TalkAction).
 
 \subsection*{main.py}
-The main.py file is responsible for launching the two threads for the 
-TCP and UDP server respectively. It also handles the gracefull shutdown 
+The main.py file is responsible for launching the two threads for the
+TCP and UDP server respectively. It also handles the gracefull shutdown
 of these two when the programme is aborted with Ctrl-C.
 
 \subsection*{tcp\_server.py}
->>>>>>> Stashed changes
 The TCPServer class is the main class of the server. It keeps track of
 connected clients and when they are ready to be read from or written
 to. It also provides an easy access to queue messages on the client
@@ -88,11 +87,10 @@ Channel objects when needed (or reuses them if the channel already
 exists).
 
 \subsection*{udp\_server.py}
-The UDPServer class takes care of the UDP connections, and sending them 
+The UDPServer class takes care of the UDP connections, and sending them
 to the right "conversation" based on their session keys.
 
 \subsection*{parser.py}
->>>>>>> Stashed changes
 The Parser class handles the underlying protocol. It manages joins,
 pings, messages, connections, disconnections etc. It interacts with
 the Server and the Client/User object. Lastly, the Parser is also
@@ -122,11 +120,11 @@ object to perform some action (if it doesn't get one it 30 seconds, it
 closes since the connection is seen as dead).
 
 \subsection*{talk\_action.py}
-The TalkAction class simply holds the instigator, action and the target 
+The TalkAction class simply holds the instigator, action and the target
 of said the talk action, that is used in the Talk object.
 
 \subsection*{talk\_data.py}
-The TalkData class simply holds the the data of the UDP payload, and 
+The TalkData class simply holds the the data of the UDP payload, and
 the address of the sender.
 
 \subsection*{Client}
@@ -460,10 +458,10 @@ up-to-date with the final code (mind changes to the TALK related
 code).\newline
 
 For the server, a fake client is made to overcome the same situation
-as on the client. The test runs two fake clients in threads, and each have 
+as on the client. The test runs two fake clients in threads, and each have
 different tasks, and are made to simulate a response/interaction of two
-clients on the server. They test both the TCP and the UDP part of the 
-server, by initiating a call, and simply inputting plain text over the 
+clients on the server. They test both the TCP and the UDP part of the
+server, by initiating a call, and simply inputting plain text over the
 UDP protocol.
 
 \section*{Possible features \& expansions}
@@ -480,22 +478,34 @@ should be done.
 
 \newpage
 \section*{Conclusion}
-Unfortunately, we didn't quite reach the goals we set off with at the 
+Unfortunately, we didn't quite reach the goals we set off with at the
 start of the project. Especially the group VoIP was one of our goals.
 
 On the other hand, we've gotten some experience playing with TCP and UDP
 sockets, and the programmatical restrictions and differences of using them,
-in an actual program. 
+in an actual program.
 
 
 
 \newpage
 \section*{User guide}
-The server is simply started by running $python main.py$ file in the 
-root directory of the server (the server is called voixer). If less 
-detailed output/logging is needed, it can easily be altered in the 
-main.py file, along with the port to listen to (if the address is 
+The server is simply started by running $python main.py$ file in the
+root directory of the server (the server is called voixer). If less
+detailed output/logging is needed, it can easily be altered in the
+main.py file, along with the port to listen to (if the address is
 already in use).
 
+Starting the client is done by running the ``main.py'' in the Voix
+directory. Providing the ``-c'' argument runs the application in
+CLI-mode (which is the only operational interface at this time). Once
+run the host must be set and if the server is running on the local
+machine, then the host is set by writing ``HOST: localhost''.
 
+Then connecting is done by ``CONNECT nickname fullname''. \#lobby is
+the main room and messages to this room is sent by writing ``MSG
+\#lobby: message''. Joining new channels is done by writing ``JOIN:
+\#room''. Again the main purpose of this application was VoIP. A
+connection was meant to be set up by writing ``TALK user: REQUEST''
+etc. But it is not functionnal! At this moment the application is only
+a IM client/server where the VoIP backend is incomplete.
 \end{document}

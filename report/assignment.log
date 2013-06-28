@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Arch Linux) (format=pdflatex 2013.5.22)  28 JUN 2013 23:16
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Arch Linux) (format=pdflatex 2013.5.22)  28 JUN 2013 23:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1047,187 +1047,92 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[1] <../uml/uml_class_diagram_for_voix_cli.png, id=41, 245.91875pt x 313.17pt>
+[1] [2]
+<../uml/uml_class_diagram_for_voix_cli.png, id=44, 245.91875pt x 313.17pt>
 File: ../uml/uml_class_diagram_for_voix_cli.png Graphic file (type png)
 
 <use ../uml/uml_class_diagram_for_voix_cli.png>
 Package pdftex.def Info: ../uml/uml_class_diagram_for_voix_cli.png used on inpu
-t line 122.
+t line 137.
 (pdftex.def)             Requested size: 221.32481pt x 281.85037pt.
 
-<../uml/uml_class_diagram_for_voix_con.png, id=42, 187.70125pt x 251.94125pt>
+<../uml/uml_class_diagram_for_voix_con.png, id=45, 187.70125pt x 251.94125pt>
 File: ../uml/uml_class_diagram_for_voix_con.png Graphic file (type png)
 
 <use ../uml/uml_class_diagram_for_voix_con.png>
 Package pdftex.def Info: ../uml/uml_class_diagram_for_voix_con.png used on inpu
-t line 129.
+t line 144.
 (pdftex.def)             Requested size: 168.92957pt x 226.74503pt.
- [2]
+
 <../uml/uml_class_diagram_for_voix_int.png, id=46, 524.96124pt x 163.61125pt>
 File: ../uml/uml_class_diagram_for_voix_int.png Graphic file (type png)
 
 <use ../uml/uml_class_diagram_for_voix_int.png>
 Package pdftex.def Info: ../uml/uml_class_diagram_for_voix_int.png used on inpu
-t line 136.
+t line 151.
 (pdftex.def)             Requested size: 472.46075pt x 147.24875pt.
-
-<../uml/uml_class_diagram_for_voix_mes.png, id=47, 259.97125pt x 107.40125pt>
+ [3 <../uml/uml_class_diagram_for_voix_cli.png>]
+<../uml/uml_class_diagram_for_voix_mes.png, id=51, 259.97125pt x 107.40125pt>
 File: ../uml/uml_class_diagram_for_voix_mes.png Graphic file (type png)
 
 <use ../uml/uml_class_diagram_for_voix_mes.png>
 Package pdftex.def Info: ../uml/uml_class_diagram_for_voix_mes.png used on inpu
-t line 142.
+t line 157.
 (pdftex.def)             Requested size: 233.97195pt x 96.66022pt.
- [3 <../uml/uml_class_diagram_for_voix_cli.png> <../uml/uml_class_diagram_for_v
-oix_con.png>]
-<../uml/uml_class_diagram_for_voix_par.png, id=53, 155.58125pt x 88.33pt>
+
+<../uml/uml_class_diagram_for_voix_par.png, id=52, 155.58125pt x 88.33pt>
 File: ../uml/uml_class_diagram_for_voix_par.png Graphic file (type png)
 
 <use ../uml/uml_class_diagram_for_voix_par.png>
 Package pdftex.def Info: ../uml/uml_class_diagram_for_voix_par.png used on inpu
-t line 149.
+t line 164.
 (pdftex.def)             Requested size: 140.02182pt x 79.49625pt.
- [4 <../uml/uml_class_diagram_for_voix_int.png> <../uml/uml_class_diagram_for_v
-oix_mes.png> <../uml/uml_class_diagram_for_voix_par.png>]
-LaTeX Font Info:    Try loading font information for U+msa on input line 169.
+ [4 <../uml/uml_class_diagram_for_voix_con.png> <../uml/uml_class_diagram_for_v
+oix_int.png> <../uml/uml_class_diagram_for_voix_mes.png>]
+LaTeX Font Info:    Try loading font information for U+msa on input line 184.
  (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 169.
+LaTeX Font Info:    Try loading font information for U+msb on input line 184.
 
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-Underfull \hbox (badness 10000) in paragraph at lines 189--192
-
- []
+) [5 <../uml/uml_class_diagram_for_voix_par.png>] [6] [7] [8] [9]
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 457.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 199--202
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 207--210
-
- []
-
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 215--218
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 223--226
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 232--235
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 242--245
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 249--252
-
- []
-
-[6]
-Underfull \hbox (badness 10000) in paragraph at lines 256--259
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 265--268
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 272--275
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 279--283
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 288--292
-
- []
-
-[7]
-Underfull \hbox (badness 10000) in paragraph at lines 298--301
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 305--309
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 320--325
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 331--336
-
- []
-
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 345--348
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 353--356
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 361--364
-
- []
-
-[9]
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 402.
-
- (/usr/share/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+(/usr/share/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
-LaTeX Font Info:    Try loading font information for TS1+ptm on input line 402.
+LaTeX Font Info:    Try loading font information for TS1+ptm on input line 457.
 
 
 (/usr/share/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-) [10] [11] [12]
-(./assignment.aux) ) 
+)
+Underfull \hbox (badness 10000) in paragraph at lines 455--461
+
+ []
+
+[10] [11] [12] (./assignment.aux) ) 
 Here is how much of TeX's memory you used:
  15296 strings out of 493488
  279478 string characters out of 3146892
- 351124 words of memory out of 3000000
+ 352124 words of memory out of 3000000
  18221 multiletter control sequences out of 15000+200000
  13516 words of font info for 47 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
  63i,11n,65p,454b,527s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/sh
-are/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
-></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/share/texmf-dist/fonts
-/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/urw/time
-s/utmr8a.pfb>
-Output written on assignment.pdf (13 pages, 115900 bytes).
+{/usr/share/texmf-dist/fonts/enc/dvips/base/
+8r.enc}{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/s
+hare/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb
+></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/share/t
+exmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts
+/type1/urw/times/utmr8a.pfb>
+Output written on assignment.pdf (13 pages, 124986 bytes).
 PDF statistics:
  118 PDF objects out of 1000 (max. 8388607)
  60 compressed objects within 1 object stream
