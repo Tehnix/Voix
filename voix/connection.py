@@ -65,10 +65,12 @@ class Connection(object):
         while True:
             data = self.input.read(1024)
             try:
-                self.sock.sendto(data, (self.client.host, int(self.client.port) + 1))
+                self.sock.sendto(
+                    data,
+                    (self.client.host, int(self.client.port) + 1)
+                )
             except socket.error:
                 break
-
 
     def is_connected(self):
         return self.connected
@@ -80,15 +82,16 @@ class Connection(object):
 
         """
         self.sock.bind((self.client.host, self.client.udp.port))
-        self.output = self.audio.open(format = pyaudio.paInt16,
-                                      channels = 1,
-                                      rate = 10240,
-                                      output = True)
-        self.input = self.audio.open(format = pyaudio.paInt16,
-                                     channels = 1,
-                                     rate = 10240,
-                                     input = True,
+        self.output = self.audio.open(format=pyaudio.paInt16,
+                                      channels=1,
+                                      rate=10240,
+                                      output=True)
+        self.input = self.audio.open(format=pyaudio.paInt16,
+                                     channels=1,
+                                     rate=10240,
+                                     input=True,
                                      frames_per_buffer=1024)
+
     def close_stream(self):
         """
         Opens a UDP stream to the server, which redirects the

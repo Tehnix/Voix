@@ -5,6 +5,7 @@ import logging
 import sys
 from threading import Timer
 
+
 class CLI(object):
     """
     """
@@ -26,15 +27,21 @@ class CLI(object):
         """
 
         message = ''
-        message = not channel is None and userlist is None and '[Joined] %s' % channel
-        message = not userlist is None and '[{0}] Users: {1}'.format(channel, userlist) or message
+        if channel and not userlist:
+            message = '[Joined] %s' % channel
+
+        if userlist:
+            message = '[{0}] Users: {1}'.format(channel, userlist)
 
         message = message.replace('\r\n', '')
 
         print message
 
-
-    def write_message(self, author=None, recipient=None, channel=None, message=None):
+    def write_message(self,
+                      author=None,
+                      recipient=None,
+                      channel=None,
+                      message=None):
         """
 
         Arguments:
@@ -68,19 +75,27 @@ class CLI(object):
         ]
 
         message = None
-        message = requester and code.lower() == 'request' and msgs[0].format(requester) or message
+        if requester and code.lower() == 'request':
+            message = msgs[0].format(requester)
+
         if not message is None:
             self.prompt_by_requester = requester
 
-        message = not requester and code.lower() == 'request' and msgs[1].format(responder) or message
+        if not requester and code.lower() == 'request':
+            message = msgs[1].format(responder)
+
         if not message is None:
             t = Timer(self.timeout, self.talk_timeout_timer)
             t.start()
 
-        message = not requester and code.lower() == 'deny' and msgs[2].format(responder) or message
+        if not requester and code.lower() == 'deny':
+            message = msgs[2].format(responder)
 
-        message = requester and code.lower() == 'end' and msgs[3].format(requester) or message
-        message = not requester and code.lower() == 'end' and msgs[3].format(responder) or message
+        if requester and code.lower() == 'end':
+            message = msgs[3].format(requester)
+
+        if not requester and code.lower() == 'end':
+            message = msgs[3].format(responder)
 
         print '[VoIP] %s' % message
 
@@ -97,7 +112,10 @@ class CLI(object):
 
                 req = self.prompt_by_requester
                 if req:
-                    action = action is 'y' and 'Accept' or action is 'n' and 'Deny'
+                    if action == 'y':
+                        action = 'Accept'
+                    elif action == 'n':
+                        action = 'Deny'
                     action = 'TALK {0}: %s'.format(req) % action
                     self.prompt_by_requester = None
 

@@ -1,4 +1,8 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+
 from wx import Frame
+
 
 class GUI(Frame):
     def __init__(self, parent, id, title):

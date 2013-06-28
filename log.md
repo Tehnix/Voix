@@ -29,3 +29,10 @@
 ## 16-06-2013 ##
 * Find out that we're actually group 4, and have forgotten to update
   the online version of the log (sorry Lars!!)
+
+## 17-06-2013 ##
+* Present `what's done so far' at DTU and furter discussion of
+  features.
+
+## 18-06-2013 ##
+* Slight modifications to the protocol.
