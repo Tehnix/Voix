@@ -64,7 +64,8 @@ each hold their own class. Each class is called the same as its file
 (ie. channel.py holds the class Channel, and talk\_action.py holds the
 class TalkAction).
 
-\subsection*{tcp\_server.py}
+\subsection*{Server}
+\subsubsection*{tcp\_server.py}
 The TCPServer class is the main class of the server. It keeps track of
 connected clients and when they are ready to be read from or written
 to. It also provides an easy access to queue messages on the client
@@ -72,7 +73,7 @@ objects. The Server class is also responsible for PINGing the clients
 periodically. The server class is the one the instantiates new Client
 objects.
 
-\subsection*{tcp\_client.py}
+\subsubsection*{tcp\_client.py}
 The TCPClient class takes care of the TCP connected clients (usually
 IM, and also used to initiate the UDP client). It keeps track of when
 it was pinged, its own User object, the message queue for the
@@ -80,7 +81,7 @@ socket/client etc. The TCPClient is also the one that instantiates new
 Channel objects when needed (or reuses them if the channel already
 exists).
 
-\subsection*{parser.py}
+\subsubsection*{parser.py}
 The Parser class handles the underlying protocol. It manages joins,
 pings, messages, connections, disconnections etc. It interacts with
 the Server and the Client/User object. Lastly, the Parser is also
@@ -88,20 +89,20 @@ responsible for instantiating new Talk objects in new threads when
 necessary (and uses TalkAction objects to handle actions related to
 the talk protocol).
 
-\subsection*{channel.py}
+\subsubsection*{channel.py}
 The Channel class gathers information about the channel, and what
 users are in it, along with giving quick methods for etc cleaning up a
 channel. The channel object holds a static dictionary (hashmap) of all
 the channel names pointing to their channel objects. This provides an
 easy way to avoid channel name duplication.
 
-\subsection*{user.py}
+\subsubsection*{user.py}
 The User class holds the user data, and provides easy access to
 leaving or joining a channel. The User class holds a static list of
 all user nicknames (represented in strings), which allows the server
 to quickly determine if the nickname is already is in use.
 
-\subsection*{talk.py}
+\subsubsection*{talk.py}
 The Talk class takes care of the VoIP chat sessions, and manages the
 UDP clients that are connected/linked to it. It has a session key, to
 provide a quick way of referencing what Talk object (what
@@ -109,10 +110,76 @@ conversation) the client needs to enter. It waits for a TalkAction
 object to perform some action (if it doesn't get one it 30 seconds, it
 closes since the connection is seen as dead).
 
-\subsection*{talk\_action.py}
+\subsubsection*{talk\_action.py}
 The TalkAction class simply holds the action and the target of said
 action, that is used in the Talk object.
 
+\subsection*{Client}
+The client has the following architecture as seen on the UML
+diagrams below. Each class is described in details in the sub-sections.
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.9]{../uml/uml_class_diagram_for_voix_cli}
+    \caption{The structure of the Client class which is the main class,
+      that operates on almost all the other classes.}
+  \end{center}
+\end{figure}
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.9]{../uml/uml_class_diagram_for_voix_con}
+    \caption{The structure of the Connection class that handles TCP
+      and UDP sockets.}
+  \end{center}
+\end{figure}
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.9]{../uml/uml_class_diagram_for_voix_int}
+    \caption{The structure of the CLI class.}
+  \end{center}
+\end{figure}
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.9]{../uml/uml_class_diagram_for_voix_mes}
+    \caption{A message handler that lets interfaces register a
+      callback to message and talk actions.}
+  \end{center}
+\end{figure}
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.9]{../uml/uml_class_diagram_for_voix_par}
+    \caption{The command parser that both translates stdin input and
+      data received from the server.}
+  \end{center}
+\end{figure}
+\subsubsection*{client.py}
+All client operations are kept here and is the core part of the
+application. The parser calls the methods defined here. This could be
+connecting, setting hostname, join a channel etc.
+\subsubsection*{connection.py}
+TCP and UDP sockets are set up here to keep any connection-related
+operations in one place. Threads are instantiated here to handle
+incoming data from the server.
+\subsubsection*{message\_handler.py}
+This class is mainly a bridge between interfaces and the
+core. Interfaces register callback functions that the core then
+calls. The core does not have to know whether the interface is
+graphically or something else.
+\subsubsection*{parser.py}
+Parser handles all the input from stdin and the server. Using regular
+expressions all input is divided up into a list of the length $4$. The
+first value is the command that is used to look up which function to
+call. The remaining values are sent as arguments to this function.
+\subsubsection*{cli.py}
+The command line interface which is the only working interface. This
+class holds the main program loop that reads from stdin. Commands may
+be entered directly from the command line. For instance the server
+host is set by writing ``HOST localhost'' and connecting is then
+``CONNECT nickname fullname''. The client's version is automatically
+parsed from the newest tag by the version control system, git.
+\subsubsection*{gui.py}
+The GUI class is to be defined here properly set up with wxWidgets. At
+this moment it doesn't have much functionality. Therefore any
+interaction with the client must happen using the CLI.
 
 \section*{Protocol}
 For the application, a custom protocol has been made. The following is
@@ -298,36 +365,7 @@ Example - DISCONNECT\newline
 \noindent Signals to the server that the user is disconnecting, and
 allows the server to quickly clean up after the user.
 
-\begin{figure}[H]
-  \begin{center}
-    \includegraphics[scale=0.9]{../uml/uml_class_diagram_for_voix_cli}
-    \caption{TODO:}
-  \end{center}
-\end{figure}
-\begin{figure}[H]
-  \begin{center}
-    \includegraphics[scale=0.9]{../uml/uml_class_diagram_for_voix_con}
-    \caption{TODO:}
-  \end{center}
-\end{figure}
-\begin{figure}[H]
-  \begin{center}
-    \includegraphics[scale=0.9]{../uml/uml_class_diagram_for_voix_int}
-    \caption{TODO:}
-  \end{center}
-\end{figure}
-\begin{figure}[H]
-  \begin{center}
-    \includegraphics[scale=0.9]{../uml/uml_class_diagram_for_voix_mes}
-    \caption{TODO:}
-  \end{center}
-\end{figure}
-\begin{figure}[H]
-  \begin{center}
-    \includegraphics[scale=0.9]{../uml/uml_class_diagram_for_voix_par}
-    \caption{TODO:}
-  \end{center}
-\end{figure}
+
 \section*{Testing}
 The client has a variety of tests to assure valid data while
 developing. The client is tested by itself with a dummy server. The
@@ -362,7 +400,9 @@ distributed on modules as seen in the following scheme.
 The test methods' names should explain the goal that is wished to
 assert for. And the runtime of
 {\fontfamily{ptm}\selectfont\texttildelow}$6$ seconds is caused by
-delays to overcome threaded operations.
+delays to overcome threaded operations. This coverage may not be
+up-to-date with the final code (mind changes to the TALK related
+code).
 
 For the server, a fake client is made to overcome the same situation
 as on the client. Again real scenarios are not tested and the test
