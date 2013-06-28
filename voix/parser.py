@@ -13,8 +13,8 @@ class Parser(object):
                         'JOIN': client.join_channel,
                         'MSG': client.message,
                         'TALK': client.talk,
-                        'ACCEPT': client.accepted,
-                        'DENY': client.denied,
+                        'ACCEPTED': client.accepted,
+                        'NOTACCEPTED': client.denied,
                         'PING': client.pong,
                         'JOINED': client.joined_channel,
                         'USERLIST': client.userlist}

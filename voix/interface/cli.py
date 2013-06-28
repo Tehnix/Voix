@@ -1,3 +1,6 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+
 import logging
 import sys
 from threading import Timer
@@ -10,11 +13,26 @@ class CLI(object):
         """
         """
         super(CLI, self).__init__()
+        client.register_update_callback(self.update)
         client.message_handler.register_message_callback(self.write_message)
         client.message_handler.register_talk_callback(self.talk_prompt)
         self.client = client
+        self.timeout = 15
         self.prompt_by_requester = None
         self._testing = None
+
+    def update(self, channel=None, userlist=None):
+        """
+        """
+
+        message = ''
+        message = not channel is None and userlist is None and '[Joined] %s' % channel
+        message = not userlist is None and '[{0}] Users: {1}'.format(channel, userlist) or message
+
+        message = message.replace('\r\n', '')
+
+        print message
+
 
     def write_message(self, author=None, recipient=None, channel=None, message=None):
         """
@@ -25,8 +43,7 @@ class CLI(object):
 
         author = author is None and self.client.nick or author
         channel = not channel is None and '[%s] ' % channel or ''
-        recipient = not recipient is None and '@%s << ' % recipient or ''
-
+        recipient = not recipient is None and '[PM: %s] ' % recipient or ''
 
         message = message.replace('\r\n', '')
 
@@ -76,7 +93,7 @@ class CLI(object):
         """
         try:
             while True:
-                action = raw_input('>>> ')
+                action = raw_input()
 
                 req = self.prompt_by_requester
                 if req:

@@ -31,10 +31,18 @@ class Client(object):
         self.name = None
 
         self.parser = Parser(self)
+
         self.message_handler = MessageHandler()
+        self.update_callback = None
 
         self.tcp = Connection(self, 'TCP')
         self.udp = Connection(self, 'UDP')
+
+    def register_update_callback(self, func):
+        """
+        """
+        self.update_callback = func
+
 
     def set_host(self, data):
         """
@@ -76,8 +84,11 @@ class Client(object):
 
         self.nick = data[2].split()[0]
         name = ' '.join(data[2].split()[1:])
-        self.tcp.connect((self.host, int(self.port)))
-        self.tcp.send(bytes('CONNECT: {0} {1} {2}\r\n'.format(self.nick,
+        try:
+            self.tcp.connect((self.host, int(self.port)))
+        except socket.error as e:
+            return self.denied([e.strerror])
+        self.tcp.send(bytes('CONNECT: "{0}" "{1}" {2}\r\n'.format(self.nick,
                                                               name,
                                                               get_git_version())))
         self.tcp.handle.start()
@@ -122,14 +133,28 @@ class Client(object):
         if not self.tcp.is_connected():
             raise Warning('You are not connected!')
 
-        chan = '#' in data[1] and data[1] or None
-        recp = not '#' in data[1] and data[1] or None
+        chan = None
+        recp = None
+        sender = None
+
+        if data[1] and '#' in data[1]:
+            chan = data[1]
+        elif data[1] and not '#' in data[1]:
+            recp = data[1]
+        elif not data[1]:
+            recp = data[0]
+
+        if data[0] and data[1]:
+            sender = data[0]
+
+        chatter = sender or recp
+
         msg = data[2]
 
-        if data[1] is None or chan:
-            self.tcp.send(bytes('MSG {0}: {1}\r\n'.format(data[0] or chan, msg)))
+        if (not data[0] and data[1]) or (not data[1] and data[0]):
+            self.tcp.send(bytes('MSG {0}: {1}\r\n'.format(chan or recp, msg)))
 
-        self.message_handler.message(author=data[0], recipient=recp, channel=chan, message=msg)
+        self.message_handler.message(author=sender, recipient=recp, channel=chan, message=msg)
 
     def talk(self, data):
         """
@@ -173,15 +198,15 @@ class Client(object):
         logging.debug('Connection to {0} has been established!'.format(data[0]))
 
     def denied(self, data):
-        logging.debug('Your attempt to connect to was denied. Reason: '.format(data[0]))
+        logging.debug('Your attempt to connect failed. Reason: {0}'.format(data[0]))
 
     def joined_channel(self, data):
-        # TODO: Enter room lulz.
-        logging.debug('You have joined the channel: '.format(data[0]))
+        self.update_callback(channel=data[2])
+        logging.debug('You have joined the channel: '.format(data[2]))
 
     def userlist(self, data):
-        # TODO: update GUI with USERLIST.
-        logging.debug('Users on {0}: {1}'.format(data[0], data[2]))
+        self.update_callback(channel=data[1], userlist=data[2])
+        logging.debug('Users on {0}: {1}'.format(data[1], data[2]))
 
     def close(self):
         """Wrapper for the sockets close function."""

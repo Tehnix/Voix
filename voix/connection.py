@@ -40,6 +40,7 @@ class Connection(object):
 
     def tcp_handler(self):
         data = ''
+
         while True:
             try:
                 data += self.sock.recv(self.buf_size)

@@ -40,7 +40,7 @@ class ConnectionInTest(unittest.TestCase):
         self.con.send(bytes('MSG Tehnix JLow: <(^.^<)\r\n'))
         self.client.tcp.handle.start()
         time.sleep(1)
-        self.assertEquals(sys.stdout.getvalue().strip(), '@JLow << Tehnix: <(^.^<)')
+        self.assertEquals(sys.stdout.getvalue().strip(), '[PM: JLow] Tehnix: <(^.^<)')
 
     def tearDown(self):
         self.client.close()
