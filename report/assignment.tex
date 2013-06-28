@@ -64,8 +64,13 @@ each hold their own class. Each class is called the same as its file
 (ie. channel.py holds the class Channel, and talk\_action.py holds the
 class TalkAction).
 
-\subsection*{Server}
-\subsubsection*{tcp\_server.py}
+\subsection*{main.py}
+The main.py file is responsible for launching the two threads for the 
+TCP and UDP server respectively. It also handles the gracefull shutdown 
+of these two when the programme is aborted with Ctrl-C.
+
+\subsection*{tcp\_server.py}
+>>>>>>> Stashed changes
 The TCPServer class is the main class of the server. It keeps track of
 connected clients and when they are ready to be read from or written
 to. It also provides an easy access to queue messages on the client
@@ -81,7 +86,12 @@ socket/client etc. The TCPClient is also the one that instantiates new
 Channel objects when needed (or reuses them if the channel already
 exists).
 
-\subsubsection*{parser.py}
+\subsection*{udp\_server.py}
+The UDPServer class takes care of the UDP connections, and sending them 
+to the right "conversation" based on their session keys.
+
+\subsection*{parser.py}
+>>>>>>> Stashed changes
 The Parser class handles the underlying protocol. It manages joins,
 pings, messages, connections, disconnections etc. It interacts with
 the Server and the Client/User object. Lastly, the Parser is also
@@ -110,9 +120,13 @@ conversation) the client needs to enter. It waits for a TalkAction
 object to perform some action (if it doesn't get one it 30 seconds, it
 closes since the connection is seen as dead).
 
-\subsubsection*{talk\_action.py}
-The TalkAction class simply holds the action and the target of said
-action, that is used in the Talk object.
+\subsection*{talk\_action.py}
+The TalkAction class simply holds the instigator, action and the target 
+of said the talk action, that is used in the Talk object.
+
+\subsection*{talk\_data.py}
+The TalkData class simply holds the the data of the UDP payload, and 
+the address of the sender.
 
 \subsection*{Client}
 The client has the following architecture as seen on the UML
@@ -186,9 +200,11 @@ For the application, a custom protocol has been made. The following is
 a list with an explanation of all the protocol commands/actions.
 
 \subsection*{CONNECT}
-From    - Client\newline
-Syntax  - CONNECT: $<$nickname$>$ $<$realname$>$ version number\newline
-Example - CONNECT: "John87" "John Wilson" 1.0.0\newline
+\begin{verbatim}
+From    - Client
+Syntax  - CONNECT: <nickname> <realname> version number
+Example - CONNECT: "John87" "John Wilson" 1.0.0
+\end{verbatim}
 
 \noindent The CONNECT action is sent when the client makes the initial
 connection. Without this, the client cannot proceed further since all
@@ -196,42 +212,52 @@ commands will be seen as invalid if the user hasn't authenticated
 himself with this.
 
 \subsection*{ACCEPT}
-From    - Server\newline
-Syntax  - ACCEPT: $<$hostname$>$\newline
-Example - ACCEPT: ip.google.com\newline
+\begin{verbatim}
+From    - Server
+Syntax  - ACCEPT: <hostname>
+Example - ACCEPT: ip.google.com
+\end{verbatim}
 
 \noindent The ACCEPT action is sent to the client to acknowledge the
 CONNECT.
 
 \subsection*{NOTACCEPTED}
-From    - Server\newline
-Syntax  - NOTACCEPTED: $<$message$>$\newline
-Example - NOTACCEPTED: Syntax error, please resend the CONNECT request\newline
+\begin{verbatim}
+From    - Server
+Syntax  - NOTACCEPTED: <message>
+Example - NOTACCEPTED: Syntax error, please resend the CONNECT request
+\end{verbatim}
 
 \noindent The NOTACCEPTED action is sent when either there is a syntax
 error in the CONNECT, or when the CONNECT hasn't been sent.
 
 \subsection*{NICKNAMEINUSE}
-From    - Server\newline
-Syntax  - NICKNAMEINUSE: $<$message$>$\newline
-Example - NICKNAMEINUSE: The nickname 'John83' is already taken\newline
+\begin{verbatim}
+From    - Server
+Syntax  - NICKNAMEINUSE: <message>
+Example - NICKNAMEINUSE: The nickname 'John83' is already taken
+\end{verbatim}
 
 \noindent The NICKNAMEINUSE action is sent when the nickname that the
 user sent in with the CONNECT is already in use.
 
 \subsection*{PING}
-From    - Server\newline
-Syntax  - PING: $<$random number$>$\newline
-Example - PING: 42313812731\newline
+\begin{verbatim}
+From    - Server
+Syntax  - PING: <random number>
+Example - PING: 42313812731
+\end{verbatim}
 
 \noindent The server keeps track of if clients are still connected by
 sending them a PING periodically, and expecting a return PONG from
 them with the same number as the PING had.
 
 \subsection*{PONG}
-From    - Client\newline
-Syntax  - PONG: $<$random number recieved from PING$>$\newline
-Example - PONG: 42313812731\newline
+\begin{verbatim}
+From    - Client
+Syntax  - PONG: <random number recieved from PING>
+Example - PONG: 42313812731
+\end{verbatim}
 
 \noindent The client sends a PONG as a response to a PING to let the
 server know that it is actually connected, and isn't a faulty
@@ -239,100 +265,122 @@ connection (or that it has a latency higher than a set amount of
 seconds, which is 150 by default).
 
 \subsection*{JOIN}
-From    - Client\newline
-Syntax  - JOIN: $<$channel$>$\newline
-Example - JOIN: \#SuperAwesomeChannel\newline
+\begin{verbatim}
+From    - Client
+Syntax  - JOIN: <channel>
+Example - JOIN: \#SuperAwesomeChannel
+\end{verbatim}
 
 \noindent Send a request to the server to join a channel.
 
 \subsection*{JOINED}
-From    - Server\newline
-Syntax  - JOINED: $<$channel$>$\newline
-Example - JOINED: \#SuperAwesomeChannel\newline
+\begin{verbatim}
+From    - Server
+Syntax  - JOINED: <channel>
+Example - JOINED: \#SuperAwesomeChannel
+\end{verbatim}
 
 \noindent Respond to the client that it has successfully joined a channel.
 
 \subsection*{USERLIST}
-From    - Server\newline
-Syntax  - USERLIST $<$channel$>$: $<$comma separated list of users$>$\newline
-Example - USERLIST \#SuperAwesomeChannel: Will, John83, Mike\newline
+\begin{verbatim}
+From    - Server
+Syntax  - USERLIST <channel>: <comma separated list of users>
+Example - USERLIST \#SuperAwesomeChannel: Will, John83, Mike
+\end{verbatim}
 
 \noindent This is send right after the JOINED action, and lists all
 the users in the channel including the user itself (the client is
 responsible for filtering this out).
 
 \subsection*{USERJOIN}
-From    - Server\newline
-Syntax  - USERJOIN $<$channel$>$: $<$nickname$>$\newline
-Example - USERJOIN \#SuperAwesomeChannel: Thomas12\newline
+\begin{verbatim}
+From    - Server
+Syntax  - USERJOIN <channel>: <nickname>
+Example - USERJOIN \#SuperAwesomeChannel: Thomas12
+\end{verbatim}
 
 \noindent Notify the client that a user has joined a channel.
 
 \subsection*{USERLEAVE}
-From    - Server\newline
-Syntax  - USERLEAVE $<$channel$>$: $<$nickname$>$\newline
-Example - USERLEAVE \#SuperAwesomeChannel: Thomas12\newline
+\begin{verbatim}
+From    - Server
+Syntax  - USERLEAVE <channel>: <nickname>
+Example - USERLEAVE \#SuperAwesomeChannel: Thomas12
+\end{verbatim}
 
 \noindent Notify the client that a user has left a channel.
 
 \subsection*{MSG}
-From    - Client\newline
-Syntax  - MSG $<$recipient$>$: $<$message$>$\newline
-Example - MSG \#SuperAwesomeChannel: Hey all! How's it going?\newline
-Example - MSG John83: Hey John! How's it going?\newline
+\begin{verbatim}
+From    - Client
+Syntax  - MSG <recipient>: <message>
+Example - MSG \#SuperAwesomeChannel: Hey all! How's it going?
+Example - MSG John83: Hey John! How's it going?
+\end{verbatim}
 
 \noindent The client can either send a message to a channel (where all
 clients in that channel receives it), or directly to a user.
 
 \subsection*{MSG}
-From    - Server\newline
-Syntax  - MSG $<$sender$>$ $<$recipient$>$: $<$message$>$\newline
-Example - MSG Thomas12 \#SuperAwesomeChannel: Hey all! How's it going?\newline
-Example - MSG Thomas12 John83: Hey John! How's it going?\newline
+\begin{verbatim}
+From    - Server
+Syntax  - MSG <sender> <recipient>: <message>
+Example - MSG Thomas12 \#SuperAwesomeChannel: Hey all! How's it going?
+Example - MSG Thomas12 John83: Hey John! How's it going?
+\end{verbatim}
 
 \noindent The server notifies either all the clients in a channel, or
 just one client directly, that a message has been sent to them and
 where the message stems from.
 
 \subsection*{TALK (REQUEST)}
-From    - Client\newline
-Syntax  - TALK $<$nickname$>$: REQUEST\newline
-Example - TALK John83: REQUEST\newline
+\begin{verbatim}
+From    - Client
+Syntax  - TALK <nickname>: REQUEST
+Example - TALK John83: REQUEST
+\end{verbatim}
 
 \noindent Request a VoIP conversation with John83.
 
 \subsection*{TALK (REQUEST)}
-From    - Server\newline
-Syntax  - TALK $<$nickname$>$ $<$session key$>$: REQUEST\newline
-Example - TALK John83 827742843590392: REQUEST\newline
-Example - TALK Mike 827742843590392: REQUEST\newline
+\begin{verbatim}
+From    - Server
+Syntax  - TALK <nickname> <session key>: REQUEST
+Example - TALK John83 827742843590392: REQUEST
+Example - TALK Mike 827742843590392: REQUEST
+\end{verbatim}
 
 \noindent The one that requested the conversation (let's say John83
 did this) recieves this messages with the nickname being the one he
 requested. He then needs to store the session key for later use in the
-conversation.\newline
+conversation.
 \noindent The one that recieves the request (which will be Mike in
 this case) will get the nickname of the requester in place of
 nickname. The reciever will also need to store the session key, for
 when he answers back.
 
 \subsection*{TALK (ACCEPT/DENY)}
-From    - Client\newline
-Syntax  - TALK $<$nickname$>$ $<$session key$>$: ACCEPT\newline
-Syntax  - TALK $<$nickname$>$ $<$session key$>$: DENY\newline
-Example - TALK John83 827742843590392: ACCEPT\newline
-Example - TALK John83 827742843590392: DENY\newline
+\begin{verbatim}
+From    - Client
+Syntax  - TALK <session key>: ACCEPT
+Syntax  - TALK <session key>: DENY
+Example - TALK 827742843590392: ACCEPT
+Example - TALK 827742843590392: DENY
+\end{verbatim}
 
 \noindent To continue the example from before, the one that got the
 request (Mike), will either accept or deny the request, and will send
 the matching action to the server.
 
 \subsection*{TALK (ACCEPTED/DENIED)}
-From    - Client\newline
-Syntax  - TALK $<$nickname$>$ $<$session key$>$: ACCEPTED\newline
-Syntax  - TALK $<$nickname$>$ $<$session key$>$: DENIED\newline
-Example - TALK Mike 827742843590392: ACCEPTED\newline
-Example - TALK Mike 827742843590392: DENIED\newline
+\begin{verbatim}
+From    - Client
+Syntax  - TALK <session key>: ACCEPTED
+Syntax  - TALK <session key>: DENIED
+Example - TALK 827742843590392: ACCEPTED
+Example - TALK 827742843590392: DENIED
+\end{verbatim}
 
 \noindent Again, continuing the example, since the one that got the
 reqeust (Mike) has now answered with either a ACCEPT or DENY, the
@@ -342,25 +390,31 @@ accepted, the VoIP conversation is started, if it's denied, the
 process is stopped.
 
 \subsection*{TALKSESSION}
-From    - Client\newline
-Syntax  - TALKSESSION: $<$session key$>$\newline
-Example - TALKSESSION: 827742843590392\newline
+\begin{verbatim}
+From    - Client
+Syntax  - TALKSESSION: <session key>
+Example - TALKSESSION: 827742843590392
+\end{verbatim}
 
 \noindent This is sent by the UDP client after a talk request has been
 accepted. It initiates the talk session/conversation.
 
 \subsection*{SESSIONERROR}
-From    - Server\newline
-Syntax  - SESSIONERROR: $<$message$>$\newline
-Example - SESSIONERROR: Invalid session key '827742843590392'\newline
+\begin{verbatim}
+From    - Server
+Syntax  - SESSIONERROR: <message>
+Example - SESSIONERROR: Invalid session key '827742843590392'
+\end{verbatim}
 
 \noindent If the TALKSESSION sends a wrong (nonexistant) or invalid
 session key, the server responds with a SESSIONERROR.
 
 \subsection*{DISCONNECT}
-From    - Client\newline
-Syntax  - DISCONNECT\newline
-Example - DISCONNECT\newline
+\begin{verbatim}
+From    - Client
+Syntax  - DISCONNECT
+Example - DISCONNECT
+\end{verbatim}
 
 \noindent Signals to the server that the user is disconnecting, and
 allows the server to quickly clean up after the user.
@@ -402,11 +456,14 @@ assert for. And the runtime of
 {\fontfamily{ptm}\selectfont\texttildelow}$6$ seconds is caused by
 delays to overcome threaded operations. This coverage may not be
 up-to-date with the final code (mind changes to the TALK related
-code).
+code).\newline
 
 For the server, a fake client is made to overcome the same situation
-as on the client. Again real scenarios are not tested and the test
-cases may not be reliable.
+as on the client. The test runs two fake clients in threads, and each have 
+different tasks, and are made to simulate a response/interaction of two
+clients on the server. They test both the TCP and the UDP part of the 
+server, by initiating a call, and simply inputting plain text over the 
+UDP protocol.
 
 \section*{Possible features \& expansions}
 Here's a list of additional brainstormed features and things that
@@ -415,17 +472,29 @@ should be done.
 \item Major code cleanup (mainly on the client) and possible
   rewrites of parts of the code that would simplify certain complex
   tasks.
+\item Implement group VoIP chat
   % TODO: more features??
 \end{itemize}
 
 
 \newpage
 \section*{Conclusion}
+Unfortunately, we didn't quite reach the goals we set off with at the 
+start of the project. Especially the group VoIP was one of our goals.
 
+On the other hand, we've gotten some experience playing with TCP and UDP
+sockets, and the programmatical restrictions and differences of using them,
+in an actual program. 
 
 
 
 \newpage
 \section*{User guide}
+The server is simply started by running $python main.py$ file in the 
+root directory of the server (the server is called voixer). If less 
+detailed output/logging is needed, it can easily be altered in the 
+main.py file, along with the port to listen to (if the address is 
+already in use).
+
 
 \end{document}
