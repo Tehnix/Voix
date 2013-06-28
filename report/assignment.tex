@@ -1,0 +1,214 @@
+\documentclass[12pt]{rapport}
+\usetikzlibrary{%
+  calc,%
+  decorations.pathmorphing,%
+  fadings,%
+  shadings%
+}
+\usepackage{physics}
+\usepackage{fixltx2e}
+\course{34319: Programming Projects in IT and Communication Technology}
+
+\title{VoIP/IM application}
+\author{
+  Martin Madsen (s124320)\\
+  Christian Laustsen (s124324)
+}
+\date{28. Juni 2013}
+
+\begin{document}
+\maketitle
+
+\section*{Introduction}
+The program features a server and a client. It supports basic IM with personal messaging and chat rooms that allow several users to interact with each other in real time. Furthermore, the application also implements VoIP (voice over IP), which allows the users to talk directly to one another.\newline
+
+
+The server-side part of the application is mainly written by Christian (s124324), and the client-side of the application is mainly written by Martin (s124320), although some sparring has been going on, as is natural.
+
+
+\section*{Requirements}
+The following is a list of requirements that were specified for the program when the project started. Some have been dumped or had failed attempts of implementation.
+
+\subsection*{Implemented}
+\begin{itemize}
+  \item A server that will allow multiple clients to connect
+  \item A way to keep track of connected clients and their information (nicknames etc)
+  \item Support for IM in the application
+  \item A protocol for establishing a connection with the server and for the IM part of the application
+  \item Chat rooms where several people can chat together at the same time
+  \item A default channel where people are put when they join 
+\end{itemize}
+
+\subsection*{Not implemented}
+\begin{itemize}
+  \item Group VoIP chat
+\end{itemize}
+
+
+\section*{Design \& Implementation}
+The server-side of the application is divided into several files which each hold their own class. Each class is called the same as its file (ie. channel.py holds the class Channel, and talk\_action.py holds the class TalkAction).
+
+\subsection*{server.py}
+The Server class is the main class of the server. It keeps track of connected clients and when they are ready to be read from or written to. It also provides an easy access to queue messages on the client objects. The Server class is also responsible for PINGing the clients periodically. The server class is the one the instantiates new Client objects.
+
+\subsection*{tcp\_client.py}
+The TCPClient class takes care of the TCP connected clients (usually IM, and also used to initiate the UDP client). It keeps track of when it was pinged, its own User object, the message queue for the socket/client etc. The TCPClient is also the one that instantiates new Channel objects when needed (or reuses them if the channel already exists).
+
+\subsection*{parser.py}
+The Parser class handles the underlying protocol. It manages joins, pings, messages, connections, disconnections etc. It interacts with the Server and the Client/User object. Lastly, the Parser is also responsible for instantiating new Talk objects in new threads when necessary (and uses TalkAction objects to handle actions related to the talk protocol).
+
+\subsection*{channel.py}
+The Channel class gathers information about the channel, and what users are in it, along with giving quick methods for etc cleaning up a channel. The channel object holds a static dictionary (hashmap) of all the channel names pointing to their channel objects. This provides an easy way to avoid channel name duplication.
+
+\subsection*{user.py}
+The User class holds the user data, and provides easy access to leaving or joining a channel. The User class holds a static list of all user nicknames (represented in strings), which allows the server to quickly determine if the nickname is already is in use.
+
+\subsection*{talk.py}
+The Talk class takes care of the VoIP chat sessions, and manages the UDP clients that are connected/linked to it. It has a session key, to provide a quick way of referencing what Talk object (what conversation) the client needs to enter. It waits for a TalkAction object to perform some action (if it doesn't get one it 30 seconds, it closes since the connection is seen as dead). 
+
+\subsection*{talk\_action.py}
+The TalkAction class simply holds the action and the target of said action, that is used in the Talk object.
+
+
+\section*{Protocol}
+For the application, a custom protocol has been made. The following is a list with an explanation of all the protocol commands/actions.
+
+\subsection*{CONNECT}
+From    - Client\newline
+Syntax  - CONNECT: $<$nickname$>$ $<$realname$>$ version number\newline
+Example - CONNECT: "John87" "John Wilson" 1.0.0\newline
+
+\noindent The CONNECT action is sent when the client makes the initial connection. Without this, the client cannot proceed further since all commands will be seen as invalid if the user hasn't authenticated himself with this.
+
+\subsection*{ACCEPT}
+From    - Server\newline
+Syntax  - ACCEPT: $<$hostname$>$\newline
+Example - ACCEPT: ip.google.com\newline
+
+\noindent The ACCEPT action is sent to the client to acknowledge the CONNECT.
+
+\subsection*{PING}
+From    - Server\newline
+Syntax  - PING: $<$random number$>$\newline
+Example - PING: 42313812731\newline
+
+\noindent The server keeps track of if clients are still connected by sending them a PING periodically, and expecting a return PONG from them with the same number as the PING had.
+
+\subsection*{PONG}
+From    - Client\newline
+Syntax  - PONG: $<$random number recieved from PING$>$\newline
+Example - PONG: 42313812731\newline
+
+\noindent The client sends a PONG as a response to a PING to let the server know that it is actually connected, and isn't a faulty connection (or that it has a latency higher than a set amount of seconds, which is 150 by default).
+
+\subsection*{JOIN}
+From    - Client\newline
+Syntax  - JOIN: $<$channel$>$\newline
+Example - JOIN: \#SuperAwesomeChannel\newline
+
+\noindent Send a request to the server to join a channel.
+
+\subsection*{JOINED}
+From    - Server\newline
+Syntax  - JOINED: $<$channel$>$\newline
+Example - JOINED: \#SuperAwesomeChannel\newline
+
+\noindent Respond to the client that it has successfully joined a channel.
+
+\subsection*{USERLIST}
+From    - Server\newline
+Syntax  - USERLIST $<$channel$>$: $<$comma separated list of users$>$\newline
+Example - USERLIST \#SuperAwesomeChannel: Will, John83, Mike\newline
+
+\noindent This is send right after the JOINED action, and lists all the users in the channel including the user itself (the client is responsible for filtering this out).
+
+\subsection*{USERJOIN}
+From    - Server\newline
+Syntax  - USERJOIN $<$channel$>$: $<$nickname$>$\newline
+Example - USERJOIN \#SuperAwesomeChannel: Thomas12\newline
+
+\noindent Notify the client that a user has joined a channel.
+
+\subsection*{USERLEAVE}
+From    - Server\newline
+Syntax  - USERLEAVE $<$channel$>$: $<$nickname$>$\newline
+Example - USERLEAVE \#SuperAwesomeChannel: Thomas12\newline
+
+\noindent Notify the client that a user has left a channel.
+
+\subsection*{MSG}
+From    - Client\newline
+Syntax  - MSG $<$recipient$>$: $<$message$>$\newline
+Example - MSG \#SuperAwesomeChannel: Hey all! How's it going?\newline
+Example - MSG John83: Hey John! How's it going?\newline
+
+\noindent The client can either send a message to a channel (where all clients in that channel receives it), or directly to a user.
+
+\subsection*{MSG}
+From    - Server\newline
+Syntax  - MSG $<$sender$>$ $<$recipient$>$: $<$message$>$\newline
+Example - MSG Thomas12 \#SuperAwesomeChannel: Hey all! How's it going?\newline
+Example - MSG Thomas12 John83: Hey John! How's it going?\newline
+
+\noindent The server notifies either all the clients in a channel, or just one client directly, that a message has been sent to them and where the message stems from.
+
+\subsection*{TALK (REQUEST)}
+From    - Client\newline
+Syntax  - TALK $<$nickname$>$: REQUEST\newline
+Example - TALK John83: REQUEST\newline
+
+\noindent Request a VoIP conversation with John83.
+
+\subsection*{TALK (REQUEST)}
+From    - Server\newline
+Syntax  - TALK $<$nickname$>$ $<$session key$>$: REQUEST\newline
+Example - TALK John83 827742843590392: REQUEST\newline
+Example - TALK Mike 827742843590392: REQUEST\newline
+
+\noindent The one that requested the conversation (let's say John83 did this) recieves this messages with the nickname being the one he requested. He then needs to store the session key for later use in the conversation.\newline
+\noindent The one that recieves the request (which will be Mike in this case) will get the nickname of the requester in place of nickname. The reciever will also need to store the session key, for when he answers back.
+
+\subsection*{TALK (ACCEPT/DENY)}
+From    - Client\newline
+Syntax  - TALK $<$nickname$>$ $<$session key$>$: ACCEPT\newline
+Syntax  - TALK $<$nickname$>$ $<$session key$>$: DENY\newline
+Example - TALK John83 827742843590392: ACCEPT\newline
+Example - TALK John83 827742843590392: DENY\newline
+
+\noindent To continue the example from before, the one that got the request (Mike), will either accept or deny the request, and will send the matching action to the server.
+
+\subsection*{TALK (ACCEPTED/DENIED)}
+From    - Client\newline
+Syntax  - TALK $<$nickname$>$ $<$session key$>$: ACCEPTED\newline
+Syntax  - TALK $<$nickname$>$ $<$session key$>$: DENIED\newline
+Example - TALK Mike 827742843590392: ACCEPTED\newline
+Example - TALK Mike 827742843590392: DENIED\newline
+
+\noindent Again, continuing the example, since the one that got the reqeust (Mike) has now answered with either a ACCEPT or DENY, the requester (John83) will now get a response from the server stating whether or not the request got accepted. If the conversation is accepted, the VoIP conversation is started, if it's denied, the process is stopped.
+
+\subsection*{DISCONNECT}
+From    - Client\newline
+Syntax  - DISCONNECT\newline
+Example - DISCONNECT\newline
+
+\noindent Signals to the server that the user is disconnecting, and allows the server to quickly clean up after the user.
+
+
+\section*{Testing}
+
+
+
+\section*{Possible features \& expansions}
+
+
+
+\newpage
+\section*{Conclusion}
+
+
+
+
+\newpage
+\section*{User guide}
+
+\end{document}
