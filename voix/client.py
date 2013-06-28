@@ -25,7 +25,7 @@ class Client(object):
         super(Client, self).__init__()
 
         self.host = None
-        self.port = '10000'
+        self.port = '9300'
 
         self.nick = None
         self.name = None
@@ -165,10 +165,10 @@ class Client(object):
     def talk(self, data):
         """
         Client > Server:
-        `TALK John: Request'
+        `TALK John: REQUEST'
 
         Server > Client:
-        `TALK Mike John: Request' (Private message)
+        `TALK Mike John: REQUEST' (Private message)
 
         Arguments:
         - `data`:
@@ -177,7 +177,7 @@ class Client(object):
         If `data[1]` is not None, this will be the receiver of the
         code message.
 
-        `data[2]` is always the code i.e. Request, Accept, Deny, End.
+        `data[2]` is always the code i.e. REQUEST, ACCEPT, ACCEPTED, DENY, DENIED.
         """
         if not self.tcp.is_connected():
             raise Warning('You are not connected!')
@@ -185,22 +185,25 @@ class Client(object):
         code = data[2]
         recp = ''
 
-        if data[1] is None:
-            self.message_handler.talk(responder=data[0], code=code)
-        else:
-            self.message_handler.talk(requester=data[0],
-                                      responder=data[1],
-                                      code=code)
-            recp = ' %s' % data[1]
-
-        self.tcp.send(bytes('TALK {0}{1}: {2}\r\n'.format(data[0],
-                                                          recp,
-                                                          data[2])))
-
-        if code == 'Accept':
-            self.udp.open_stream()
-        elif code == 'End':
-            self.udp.close_stream()
+        if data[0] and not data[1] and code == 'REQUEST': # 1. TALK Two: REQUEST
+            self.tcp.send(bytes('TALK %s: %s\r\n' % (data[0], code)))
+        elif data[0] and data[1] and code == 'REQUEST': # 2. TALK Two 123: REQUEST | target = TALK One 123: REQUEST
+            self.udp.session_key = data[1]
+            if not data[0] == self.client.nick:
+                self.message_handler.talk(responder=data[0],
+                                          code=code)
+            else:
+                self.message_handler.talk(requester=data[0],
+                                          code=code)
+        elif data[0] and code == 'ACCEPT' or code == 'DENY': # 3. TALK 123: ACCEPT/DENY
+            self.tcp.send(bytes('TALK {0}: {1}\r\n'.format(data[0],
+                                                           code)))
+        elif code == 'DENIED' or code == 'ACCEPTED': # TALK 123: DENIED/ACCEPTED
+            self.message_handler.talk(code=code)
+            if code == 'ACCEPTED':
+                self.udp.open_stream()
+        elif code == 'END':
+            self.udp.close_stream() # STRESSSSSSSS!!!!!!
 
     def accepted(self, data):
         self.tcp.connected = True

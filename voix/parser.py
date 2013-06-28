@@ -27,7 +27,7 @@ class Parser(object):
         - `data`:
         """
         match = re.match(
-            r'^([A-Z]+)[ ]?([a-zA-Z]+)?[ ]?([0-9a-zA-Z#]+)?: (.+)$',
+            r'^([A-Z]+)[ ]?([0-9a-zA-Z]+)?[ ]?([0-9a-zA-Z#]+)?: (.+)$',
             data,
             re.DOTALL)
         if not match is None:

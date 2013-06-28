@@ -68,40 +68,44 @@ class CLI(object):
         [VoIP] Your conversation with `responder` has been terminated.
         """
         msgs = [
-            '{0} wish to have a conversation with you. Accept? (y/n)',
-            'Awaiting response from {0}...',
-            '{0} has rejected your conversation request.',
+            '{0} wish to have a conversation with you. Accept? (y/n)', # TALK target 123: REQUEST
+            'Awaiting response from {0}...', # TALK source 123: REQUEST
+            'Conversation is now active.', # TALK !source-gem! 123: DENIED
+            '{0} has rejected your conversation request.', # TALK !source-gem! 123: DENIED
             'Your conversation with {0} has been terminated.'
         ]
 
         message = None
-        if requester and code.lower() == 'request':
+        if requester and code == 'REQUEST':
             message = msgs[0].format(requester)
-
-        if not message is None:
-            self.prompt_by_requester = requester
-
-        if not requester and code.lower() == 'request':
-            message = msgs[1].format(responder)
-
-        if not message is None:
+            self.requester = requester
             t = Timer(self.timeout, self.talk_timeout_timer)
             t.start()
+        elif responder and code == 'REQUEST':
+            message = msgs[1].format(responder)
+            self.responder = responder
+            t = Timer(self.timeout, self.talk_timeout_timer)
+            t.start()
+        elif code == 'ACCEPTED':
+            message = msgs[2]
+            self.responder = None
+        elif code == 'DENIED':
+            message = msgs[3].format(self.responder)
 
-        if not requester and code.lower() == 'deny':
-            message = msgs[2].format(responder)
 
-        if requester and code.lower() == 'end':
+        if requester and code == 'END':
             message = msgs[3].format(requester)
 
-        if not requester and code.lower() == 'end':
+        if not requester and code == 'END':
             message = msgs[3].format(responder)
 
         print '[VoIP] %s' % message
 
     def talk_timeout_timer(self):
-        self.prompt_by_requester = None
-        print '[VoIP] Request timed out!'
+        if self.requester or self.responder:
+            print '[VoIP] Request timed out!'
+            self.requester = None
+            self.responder = None
 
     def main_loop(self):
         """
@@ -110,14 +114,15 @@ class CLI(object):
             while True:
                 action = raw_input()
 
-                req = self.prompt_by_requester
+                req = self.requester
                 if req:
+                    code = ''
                     if action == 'y':
-                        action = 'Accept'
-                    elif action == 'n':
-                        action = 'Deny'
-                    action = 'TALK {0}: %s'.format(req) % action
-                    self.prompt_by_requester = None
+                        code = 'ACCEPT'
+                    else:
+                        code = 'DENY'
+                    action = 'TALK %s: %s' (self.client.udp.session_key, code)
+                    self.requester = None
 
                 self.client.parser.parse(action)
 

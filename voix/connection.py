@@ -28,6 +28,7 @@ class Connection(object):
             self.out_handle.daemon = True
             self.audio = pyaudio.PyAudio()
             self.port = random.randint(9000, 12000)
+            self.session_key = None
         else:
             self.handle = Thread(target=self.tcp_handler)
             self.handle.daemon = True
