@@ -186,6 +186,13 @@ Example - TALK Mike 827742843590392: DENIED\newline
 
 \noindent Again, continuing the example, since the one that got the reqeust (Mike) has now answered with either a ACCEPT or DENY, the requester (John83) will now get a response from the server stating whether or not the request got accepted. If the conversation is accepted, the VoIP conversation is started, if it's denied, the process is stopped.
 
+\subsection*{TALKSESSION}
+From    - Client\newline
+Syntax  - TALKSESSION: $<$session key$>$\newline
+Example - TALKSESSION: 827742843590392\newline
+
+\noindent This is sent by the UDP client after a talk request has been accepted. It initiates the talk session/conversation.
+
 \subsection*{DISCONNECT}
 From    - Client\newline
 Syntax  - DISCONNECT\newline

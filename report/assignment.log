@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2013.3.22)  28 JUN 2013 16:38
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2013.3.22)  28 JUN 2013 17:08
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -2095,6 +2095,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 190--193
 
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 197--200
+
+ []
+
 [6] [7] [8] (./assignment.aux) ) 
 Here is how much of TeX's memory you used:
  20214 strings out of 493481
@@ -2111,7 +2116,7 @@ public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/p
 ublic/amsfonts/cm/cmr12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/pub
 lic/amsfonts/cm/cmr17.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/publi
 c/amsfonts/cm/cmsy10.pfb>
-Output written on assignment.pdf (9 pages, 85174 bytes).
+Output written on assignment.pdf (9 pages, 85364 bytes).
 PDF statistics:
  85 PDF objects out of 1000 (max. 8388607)
  43 compressed objects within 1 object stream
