@@ -87,6 +87,20 @@ Example - ACCEPT: ip.google.com\newline
 
 \noindent The ACCEPT action is sent to the client to acknowledge the CONNECT.
 
+\subsection*{NOTACCEPTED}
+From    - Server\newline
+Syntax  - NOTACCEPTED: $<$message$>$\newline
+Example - NOTACCEPTED: Syntax error, please resend the CONNECT request\newline
+
+\noindent The NOTACCEPTED action is sent when either there is a syntax error in the CONNECT, or when the CONNECT hasn't been sent.
+
+\subsection*{NICKNAMEINUSE}
+From    - Server\newline
+Syntax  - NICKNAMEINUSE: $<$message$>$\newline
+Example - NICKNAMEINUSE: The nickname 'John83' is already taken\newline
+
+\noindent The NICKNAMEINUSE action is sent when the nickname that the user sent in with the CONNECT is already in use.
+
 \subsection*{PING}
 From    - Server\newline
 Syntax  - PING: $<$random number$>$\newline
@@ -192,6 +206,13 @@ Syntax  - TALKSESSION: $<$session key$>$\newline
 Example - TALKSESSION: 827742843590392\newline
 
 \noindent This is sent by the UDP client after a talk request has been accepted. It initiates the talk session/conversation.
+
+\subsection*{SESSIONERROR}
+From    - Server\newline
+Syntax  - SESSIONERROR: $<$message$>$\newline
+Example - SESSIONERROR: Invalid session key '827742843590392'\newline
+
+\noindent If the TALKSESSION sends a wrong (nonexistant) or invalid session key, the server responds with a SESSIONERROR.
 
 \subsection*{DISCONNECT}
 From    - Client\newline
