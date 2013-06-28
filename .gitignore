@@ -37,3 +37,7 @@ nosetests.xml
 # API doc
 pdf/*
 !pdf/api.pdf
+
+*.aux
+*.log
+*.gz
