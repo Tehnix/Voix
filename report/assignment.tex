@@ -7,9 +7,10 @@
 }
 \usepackage{physics}
 \usepackage{fixltx2e}
+\usepackage{textcomp}
 \course{34319: Programming Projects in IT and Communication Technology}
 
-\title{VoIP/IM application}
+\title{Voix-er: VoIP/IM application}
 \author{
   Martin Madsen (s124320)\\
   Christian Laustsen (s124324)
@@ -48,7 +49,7 @@ attempts of implementation.
     for the IM part of the application
   \item Chat rooms where several people can chat together at the same
     time
-  \item A default channel where people are put when they join
+  \item A default channel where people are put when they connect
 \end{itemize}
 
 \subsection*{Not implemented}
@@ -63,8 +64,8 @@ each hold their own class. Each class is called the same as its file
 (ie. channel.py holds the class Channel, and talk\_action.py holds the
 class TalkAction).
 
-\subsection*{server.py}
-The Server class is the main class of the server. It keeps track of
+\subsection*{tcp\_server.py}
+The TCPServer class is the main class of the server. It keeps track of
 connected clients and when they are ready to be read from or written
 to. It also provides an easy access to queue messages on the client
 objects. The Server class is also responsible for PINGing the clients
@@ -297,13 +298,85 @@ Example - DISCONNECT\newline
 \noindent Signals to the server that the user is disconnecting, and
 allows the server to quickly clean up after the user.
 
-
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.9]{../uml/uml_class_diagram_for_voix_cli}
+    \caption{TODO:}
+  \end{center}
+\end{figure}
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.9]{../uml/uml_class_diagram_for_voix_con}
+    \caption{TODO:}
+  \end{center}
+\end{figure}
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.9]{../uml/uml_class_diagram_for_voix_int}
+    \caption{TODO:}
+  \end{center}
+\end{figure}
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.9]{../uml/uml_class_diagram_for_voix_mes}
+    \caption{TODO:}
+  \end{center}
+\end{figure}
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.9]{../uml/uml_class_diagram_for_voix_par}
+    \caption{TODO:}
+  \end{center}
+\end{figure}
 \section*{Testing}
+The client has a variety of tests to assure valid data while
+developing. The client is tested by itself with a dummy server. The
+dummy server is to make sure data sent from the client reaches the
+server it is connected to. This does mean, that not all scenarios are
+testable and therefore communication between the client and the real
+server may cause unexpected results. In this situation the scenarios
+are only testable by black-box testing.
 
+The client code is approximately covered $91\%$. This coverage is
+distributed on modules as seen in the following scheme.
 
+\begin{verbatim}
+  Name                   Stmts   Miss  Cover   Missing
+  ----------------------------------------------------
+  voix                       0      0   100%
+  voix.client              101      7    93%   109, 148, 206, 217-218, 221-222
+  voix.connection           68      4    94%   103, 107-110
+  voix.interface             0      0   100%
+  voix.interface.cli        68      9    87%   38, 92, 104, 117-118, 126-129
+  voix.interface.gui         6      3    50%   17-19
+  voix.message_handler       8      0   100%
+  voix.parser               14      0   100%
+  ----------------------------------------------------
+  TOTAL                    265     23    91%
+  ----------------------------------------------------------------------
+  Ran 16 tests in 6.187s
+
+  OK
+\end{verbatim}
+
+The test methods' names should explain the goal that is wished to
+assert for. And the runtime of
+{\fontfamily{ptm}\selectfont\texttildelow}$6$ seconds is caused by
+delays to overcome threaded operations.
+
+For the server, a fake client is made to overcome the same situation
+as on the client. Again real scenarios are not tested and the test
+cases may not be reliable.
 
 \section*{Possible features \& expansions}
-
+Here's a list of additional brainstormed features and things that
+should be done.
+\begin{itemize}
+\item Major code cleanup (mainly on the client) and possible
+  rewrites of parts of the code that would simplify certain complex
+  tasks.
+  % TODO: more features??
+\end{itemize}
 
 
 \newpage
